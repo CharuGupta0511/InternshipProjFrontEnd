@@ -1,0 +1,32 @@
+.App{
+    width: 905px;
+    border: forestgreen;
+    height: 200px;
+}
+.fixed_header {
+    width: 885px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 2px solid forestgreen;
+  }
+  .fixed_header tbody {
+    display: block;
+    width: 100%;
+    overflow: auto;
+    height: 200px;
+  }
+  .fixed_header thead tr {
+    display: block;
+  }
+  .fixed_header thead {
+    background: lightblue;
+    color: black;
+    border-bottom: 1px solid black;
+  }
+  .fixed_header th,
+  .fixed_header td {
+    padding: 2px;
+    text-align: left;
+    width: 200px;
+    border-bottom: 1px solid black;
+  }
