@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import {Row,Col, Container, Card} from "reactstrap";
-import { BrowserRouter,Route,Routes,NavLink } from 'react-router-dom';
+import {Row,Col, Container, Card, DropdownItem} from "reactstrap";
+import { BrowserRouter,Route,Routes,NavLink, Router } from 'react-router-dom';
+import { Nav, NavDropdown, NavItem } from 'react-bootstrap';
 import Home from './Components/Home';
 import About from './Components/About';
 import Language from './Components/Language';
@@ -8,9 +9,16 @@ import logo from './image/logo.jpg';
 import { ToastContainer } from 'react-toastify';
 import SelectionMenu from './Components/SelectionMenu';
 import AllList from './Components/AllList';
-import OneList from './Components/OneList';
 
 function App() {
+
+    function closeTab(){
+        console.log("You clicked on exit");
+        const confirmbox = window.confirm("Do you want to close this window?")
+        if(confirmbox === true){
+            window.close();
+        }     
+    }
 
   return (
     <>
@@ -22,10 +30,16 @@ function App() {
                 fontSize: '20px',
             }}>
                 <div style={{ margin: '10px' }}>
-                    <NavLink to="/" style={({ isActive }) => ({ 
+                    <Nav>
+                        <NavDropdown title = "Home">
+                            <NavDropdown.Item onClick={closeTab}>Exit</NavDropdown.Item>
+                        </NavDropdown>
+                    </Nav>
+                    {/* <NavLink to="/" style={({ isActive }) => ({ 
                         color: isActive ? 'green' : 'white' })}>
                         Home
-                    </NavLink>
+                        <DropdownItem>Exit</DropdownItem>
+                    </NavLink> */}
                 </div>
                 <div style={{ margin: '10px' }}>
                     <NavLink to="/Language" style={({ isActive }) => ({ 
