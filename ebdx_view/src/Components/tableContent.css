@@ -1,10 +1,49 @@
-.App{
-    width: 905px;
-    border: forestgreen;
-    height: 200px;
+
+table {
+  border: 1px solid black;
+  border-collapse: separate;
+  border-spacing: 0px;
+  min-width: max-content;
 }
-.fixed_header {
-    width: 885px;
+table th {
+  position: sticky;
+  top: 0px;
+  background-color: lightgreen;
+  color: black;
+  border-bottom: 2px solid black;
+  text-align: center;
+}
+.table-wrapper {
+  height: fit-content;
+  max-height: 50vh;
+  width: 1070px;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  margin-top: 20px;
+  padding-bottom: 20px;
+  border: 1px solid green;
+  box-shadow: 0px 0px 3px green;
+  right: 100px;
+  margin-top: 0;
+}
+th,td{
+  border: 1px solid black;
+  padding-right: 30px;
+  padding-top: 15px;
+}
+.outer-wrapper {
+  border: 1px solid green;
+  box-shadow: 0px 0px 3px green;
+  margin: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 4px;
+  max-width: fit-content;
+  max-height: fit-content;
+}
+
+/* .fixed_header {
+    width: 1070px;
     table-layout: fixed;
     border-collapse: collapse;
     border: 2px solid forestgreen;
@@ -13,10 +52,11 @@
     display: block;
     width: 100%;
     overflow: auto;
-    height: 200px;
+    height: 300px;
   }
   .fixed_header thead tr {
     display: block;
+    width: 1100px;
   }
   .fixed_header thead {
     background: lightblue;
@@ -27,6 +67,6 @@
   .fixed_header td {
     padding: 2px;
     text-align: left;
-    width: 200px;
+    width: 1000px;
     border-bottom: 1px solid black;
-  }
+  } */

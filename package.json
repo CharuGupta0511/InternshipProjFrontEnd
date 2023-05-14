@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@material-ui/core": "^4.12.4",
     "cors": "^2.8.5",
     "react-table-scrollbar": "^0.1.11",
     "react-toastify": "^9.1.1"

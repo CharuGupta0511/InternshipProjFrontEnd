@@ -26,7 +26,7 @@ function SelectionMenu() {
     //  }, []);
 
     //const [sites, setSites] = useState([]);
-    const [selectedsite, setselectedsite] = useState([]);
+    const [selectedsite, setselectedsite] = useState('AFHOME');
     
     const [SitePartners, setSitePartners] = useState([]);
     const [selectedpartner, setselectedpartner] = useState('')
@@ -40,11 +40,11 @@ function SelectionMenu() {
     const sites = [
         {
             name: "AFHOME",
-            partner: ['All Partners', 'Samsung', 'Lg','Sony','Hyundai','Nike']
+            partner: ['All Partners', 'LEROY_MER_VENDIN', 'CASTO']
         },
         {
             name: "NPRO",
-            partner: ['All Partners', 'Dell', 'Iphone','Toyota']
+            partner: ['All Partners', 'BRICO PLAN-IT', 'CASTO','LEROY_MER_POR']
         },
     ];
 
@@ -149,9 +149,9 @@ function SelectionMenu() {
 
         <React.Fragment>
             <section>
-                <Card style={{height: '970px', borderBlockEndColor: 'black', width: '350px'}}>
+                <Card style={{height: '970px', borderBlockEndColor: 'black', width: '350px', right: '70px'}}>
                     <Card style={{height: '200px', borderBlockEndColor: 'black'}}>
-                    <CardHeader style={{fontWeight:'bold',backgroundColor: 'lightgreen', height: '30px'}}><h10>Partners</h10>
+                    <CardHeader style={{fontWeight:'bold',backgroundColor: 'lightgreen', height: '30px'}}><h10>Partners{selectedsite}</h10>
                         </CardHeader>
                     <CardBody>
                         

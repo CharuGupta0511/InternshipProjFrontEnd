@@ -9,30 +9,32 @@ import { Button, Card, CardBody, CardSubtitle, CardText, Container } from "react
 
 const AllList = () => {
 
-  /*   const getAllListFromServer = () => {
-        axios.get(`${base_url}/products`).then(
-            (response) =>{
-               // console.log(response);
-               console.log(response.data);
-               setProducts(response.data);
-            },
-            (error) => {
-                console.log(error);
-            }
-        );
-    }; */
-
-        //getAllListFromServer();
+    /* useEffect(() => {
+        const getAllListFromServer = () => {
+            axios.get(`${base_url}/products`).then(
+                (response) =>{
+                   // console.log(response);
+                   console.log(response.data);
+                   setProducts(response.data);
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+        };
+        getAllListFromServer();
+    }, []); */
+         
 
     const [products, setProducts] = useState([]);
 
-    useEffect(() => {
+         useEffect(() => {
               const getAllSitesFromServer = () => {
                   axios.get(`/documents?localSiteName=AFHOME`).then(
                       (response) =>{
                          // console.log(response);
                          console.log(response.data);
-                         setProducts(response.data);
+                         setProducts(response.data.documents);
                       },
                       (error) => {
                           console.log(error);
@@ -47,28 +49,29 @@ const AllList = () => {
     return(
         <div>
             <section>
-            <Card className="App">
-         <CardBody>
-        <table className="fixed_header">
+            <div>
+                <div className="table-wrapper">
+                <table>
                 <thead>
-                    <tr>
-                        <th>Issue Date</th>
-                        <th>Product Name</th>
-                        <th>Prize</th>
-                        <th>Site Name</th>
-                        <th>Partner Name</th>
-                        <th>Interchange Number</th>
-                    </tr>
+                        <th>Date and Time</th>
+                        <th>Type</th>
+                        <th>Sender code</th>
+                        <th>Reciver code</th>
+                        <th>Partner</th>
+                        <th>File name</th>
+                        <th>Interchange Numnber</th>
+                        <th>Nber of documnet</th>
+                        <th>Doc Info</th>
                 </thead>
                 <tbody>
                  {products.length > 0
-                    ? products.map((item) => <OneList key={item.id} product={item} />)
+                    ? products.map((item, idx) => <OneList key={item.id} product={item} />)
                     : "No Product"
             } 
                 </tbody>
             </table> 
-        </CardBody>
-        </Card>
+                </div>
+            </div>
         </section>
         </div>
     );
