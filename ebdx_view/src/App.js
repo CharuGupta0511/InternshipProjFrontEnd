@@ -48,7 +48,7 @@ function App() {
                 <div style={{ margin: '10px', width: '120px' }}>
                     <Nav>
                 <NavDropdown title = "Language">
-                            <NavDropdown.Item style={{background: 'lightgreen',color: 'blue'}} onClick={() => setShowModalLanguage(true)}>Franch</NavDropdown.Item>
+                            <NavDropdown.Item style={{background: 'lightgreen',color: 'blue'}} onClick={() => setShowModalLanguage(true)}>French</NavDropdown.Item>
                             
                         </NavDropdown>
                         </Nav>
