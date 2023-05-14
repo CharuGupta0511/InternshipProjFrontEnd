@@ -9,8 +9,8 @@ const OneList = ({ product }) => {
             <td>{product.receiverCode}</td>
             <td>{product.partner}</td>
             <td>{product.fileName}</td>
-            <td>{product.numberOfDocuments}</td>
             <td>{product.docNumber}</td>
+            <td>{product.numberOfDocuments}</td>
             <td>{product.docInfo}</td>
             
 

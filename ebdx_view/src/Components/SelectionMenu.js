@@ -1,35 +1,26 @@
 import React, { useState,useEffect } from "react";
 import "./selectmenu.css";
-import { Card, CardBody, CardHeader, FormGroup, Label, Input } from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { Row,Col, Card, CardBody, CardHeader, FormGroup, Label, Input } from "reactstrap";
 import base_url from "../api/bootapi";
 import axios from "axios";
 import AllList from "./AllList";
+import logo from './image/logo.jpg';
+import App from "../App";
+import SearchButtonPopup from "./SearchButtonPopup";
+import DatePopup from "./DatePopup";
 
 
 function SelectionMenu() {
 
-    //  useEffect(() => {
-    //      const getAllSitesFromServer = () => {
-    //          axios.get(`https://ebx-services.com/ebdviewretail/documents?localSiteName=AFHOME`).then(
-    //              (response) =>{
-    //                 // console.log(response);
-    //                 console.log(response.data);
-    //                 setSites(response.data);
-    //              },
-    //              (error) => {
-    //                  console.log(error);
-    //              }
-    //          );
-    
-    //      };
-    //      getAllSitesFromServer();
-    //  }, []);
+     
 
     //const [sites, setSites] = useState([]);
     const [selectedsite, setselectedsite] = useState('AFHOME');
     
     const [SitePartners, setSitePartners] = useState([]);
-    const [selectedpartner, setselectedpartner] = useState('')
+    const [selectedpartner, setselectedpartner] = useState('All Partners')
+    const navigate = useNavigate();
 
     // const sites = ['AFHOME','NPRO','SPTD']
         // const SitePartners = {
@@ -48,34 +39,71 @@ function SelectionMenu() {
         },
     ];
 
+    useEffect(() => {
+        const getFirstTimePartner = () => {
+          setSitePartners(sites.find(site => site.name === selectedsite).partner);
+          setsuccessbutton(false);
+        };
+        getFirstTimePartner();
+    }, [selectedsite]);
+
          const handletextSite=(event)=> {
             const selectedsite= event.target.value;
              setselectedsite(selectedsite);
              setSitePartners(sites.find(site => site.name === selectedsite).partner);
+             setsuccessbutton(false);
          }
 
          const handletextPartner=(event)=> {
             const selectedpartner= event.target.value;
             setselectedpartner(selectedpartner);
+            setsuccessbutton(false);
          }
 
-         const handlesubmit = event =>
+         const [searchboxValue, setsearchboxValue]=useState('');
+         const handleSearchTextbox = (e) => {
+            const searchbox = e.target.value;
+            setsearchboxValue(searchbox);
+            console.log(searchbox);
+         }
+
+         const [searchbutton, setsearchbutton] = useState(false);
+         const handlesubmitSearch = event =>
          {
             event.preventDefault();
+            setsearchbutton(true);
+            
 
+         }
+
+         const handlesubmitSearchClear = event =>
+         {
+            event.preventDefault();
+            
+         }
+
+         const[showmodalCalender, setshowmodalCalender] = useState(false);
+        const [successbutton, setsuccessbutton] = useState(false);
+         function handlesubmit(event)
+         {
+            event.preventDefault();
             if(fromdateformat > todatefromat)
             {
-                alert("Start date can't bigger than from End date");
+                setshowmodalCalender(true);
+              //  alert("Start date can't be later than End date");
+                setsuccessbutton(false);
             }
             else{
                 console.log('Success');
+                setsuccessbutton(true);
+                setsearchboxValue('');
             }
-           // getProductWithSitenParter(selectedsite,selectedpartner);
+
             
-            <AllList Selectsite={selectedsite} Selectpartner={selectedpartner} />
+           // getProductWithSitenParter(selectedsite,selectedpartner);
     
          }
-         const getProductWithSitenParter = () => {
+         /* const getProductWithSitenParter = () => {
             axios.get(`${base_url}/products/${selectedsite}/${selectedpartner}`).then(
                 (response) =>{
                    // console.log(response);
@@ -86,7 +114,7 @@ function SelectionMenu() {
                     console.log(error);
                 }
             );
-       };
+       }; */
 
        const [disable, setDisable] = useState(true);
        const [todate, setTodate] = useState([]);
@@ -133,6 +161,11 @@ function SelectionMenu() {
          const handleCheckbox1 = (e) => {
             const checkedbox = e.target.checked;
             setcheckedbox(checkedbox);
+            if(!checkedbox){  
+            setTodate('');
+            setFromdate('');
+            setDisable(true);
+            }
             console.log(checkedbox);
          }
 
@@ -142,14 +175,20 @@ function SelectionMenu() {
             sethandleCheckboxArchive(archivecheck);
             const archivevalue = archivecheck.value;
             console.log(archivevalue);
+            const mycheckbox = document.getElementsByName("mycheckbox");
+            Array.prototype.forEach.call(mycheckbox,function(e1){
+                e1.checked = false;
+            });
+            e.target.checked = true;
          }
 
 
     return (
-
-        <React.Fragment>
+        <Row>
+                    <Col md={4}>
+                    <React.Fragment>
             <section>
-                <Card style={{height: '970px', borderBlockEndColor: 'black', width: '350px', right: '70px'}}>
+                <Card style={{height: '950px',border: '2px solid green', borderBlockEndColor: 'black', width: '350px', right: '70px'}}>
                     <Card style={{height: '200px', borderBlockEndColor: 'black'}}>
                     <CardHeader style={{fontWeight:'bold',backgroundColor: 'lightgreen', height: '30px'}}><h10>Partners{selectedsite}</h10>
                         </CardHeader>
@@ -202,7 +241,7 @@ function SelectionMenu() {
                         <CardHeader style={{fontWeight:'bold',backgroundColor: 'lightgreen', height: '30px'}}><h10>Period</h10>
                         </CardHeader>
                     <CardBody>
-                    <form style={{height: '90px', backgroundColor: 'white'}} onSubmit={handlesubmit}>
+                    <form style={{height: '90px', backgroundColor: 'white'}}>
                     <FormGroup>
                         <div>
                             <label style={{fontWeight:'bold', fontSize: '15px', color: 'blue'}}>Last{' '}
@@ -216,12 +255,12 @@ function SelectionMenu() {
                              </FormGroup>
                              <FormGroup>
                              <Label check>Start date</Label>
-                                <Input name="date1" type="date" disabled={!checkedboxvalue} placeholder="dd/mm/yyyy" onChange={(e)=>handlefromdate(e)} />
+                                <Input name="date1" type="date" value={fromdate} disabled={!checkedboxvalue} placeholder="dd/mm/yyyy" onChange={(e)=>handlefromdate(e)} />
                                 
                              </FormGroup>
                              <FormGroup>
                              <Label check>End date</Label>
-                                <Input name="date2" type="date" disabled= {disable} placeholder="dd/mm/yyyy" onChange={(e)=>handletodate(e)} />
+                                <Input name="date2" type="date" value={todate} disabled= {disable} placeholder="dd/mm/yyyy" onChange={(e)=>handletodate(e)} />
                                 
                              </FormGroup>
                             </form>
@@ -235,7 +274,7 @@ function SelectionMenu() {
                     <form style={{height: '30px', backgroundColor: 'white'}}>
                     <FormGroup>
                         <div>
-                            <input style={{width: '300px', paddingLeft: '10px'}} type="text" id="Documenttype"></input>
+                            <input style={{width: '300px', paddingLeft: '10px'}} type="text"></input>
                             </div>          
                             </FormGroup>
                             </form>
@@ -264,11 +303,11 @@ function SelectionMenu() {
                                       
                             </FormGroup>
                             <FormGroup check>
-                                <Input name="ReceptionBeforeTranslation" value="ReceptionBeforeTranslation" type="checkbox" onChange={handleCheckboxArchive} /> {' '}
+                                <Input name="mycheckbox" value="ReceptionBeforeTranslation" type="checkbox" onChange={handleCheckboxArchive} /> {' '}
                                 <Label check>Before Translation</Label>
                              </FormGroup>
                              <FormGroup>
-                             <Input name="ReceptionAfterTranslation" value="ReceptionAfterTranslation" type="checkbox" onChange={handleCheckboxArchive} /> {' '}
+                             <Input name="mycheckbox" value="ReceptionAfterTranslation" type="checkbox" onChange={handleCheckboxArchive} /> {' '}
                                 <Label check>After Translation</Label>
                              </FormGroup>
                              <FormGroup>
@@ -276,11 +315,11 @@ function SelectionMenu() {
                                       
                             </FormGroup>
                             <FormGroup check>
-                                <Input name="SendingBeforeTranslation" value="SendingBeforeTranslation" type="checkbox" onChange={handleCheckboxArchive} /> {' '}
+                                <Input name="mycheckbox" value="SendingBeforeTranslation" type="checkbox" onChange={handleCheckboxArchive} /> {' '}
                                 <Label check>Before Translation</Label>
                              </FormGroup>
                              <FormGroup>
-                             <Input name="SendingAfterTranslation" value="SendingAfterTranslation" type="checkbox" onChange={handleCheckboxArchive} /> {' '}
+                             <Input name="mycheckbox" value="SendingAfterTranslation" type="checkbox" onChange={handleCheckboxArchive} /> {' '}
                                 <Label check>After Translation</Label>
                              </FormGroup>
                             </form>
@@ -288,9 +327,9 @@ function SelectionMenu() {
                     </Card>
                     <card style={{height: '50px', borderBlockEndColor: 'black'}}>
                         <CardBody>
-                            <form onSubmit={handlesubmit} style={{height: '50px', backgroundColor: 'white'}}>
+                            <form style={{height: '4px', backgroundColor: 'white'}}>
                                 <FormGroup>
-                                <button type="submit" style={{background: 'green', color: 'white', width: '150px'}}>Search</button>
+                                <button type="submit" onClick={handlesubmit} style={{background: 'green', color: 'white', width: '150px'}}>Search</button>
                                 </FormGroup>
                             </form>
                         </CardBody>
@@ -298,6 +337,43 @@ function SelectionMenu() {
                     </Card>
             </section>
         </React.Fragment>
+                    </Col>
+                    <Col md={8}>
+                    <Card style={{height: '950px',border: '2px solid green', borderBlockEndColor: 'black', width: '1100px', right: '160px'}}>
+                    <Card style={{height: '150px', borderBlockEndColor: 'black'}}>
+                    <CardBody>
+                    <form style={{height: '80px', backgroundColor: 'white'}}>
+                    <FormGroup>
+                        <div style={{height: '150px', width: '1000px', margin: '5px'}}>
+                            <label style={{color: 'green'}}>Interchange Number</label>{' '}
+                        <input name="SearchTextbox" type="textbox" disabled={!successbutton} onChange={handleSearchTextbox} value={searchboxValue} /> {' '}
+                                <button  disabled={!successbutton} style={{background: 'green', color: 'white', width: '60px', boxShadow: '0 2px 10px #999'}} onClick={handlesubmitSearch }>Go</button>{' '}
+                                <button  disabled={!successbutton} style={{background: 'blue', color: 'white', width: '60px', boxShadow: '0 2px 10px #999'}} onClick={handlesubmitSearchClear }>Clear</button>
+                        <div className='logo' style={{float : 'right', margin : '10px'}}>
+                <img src={logo} height={100} width={200} /> 
+            </div>
+            </div>
+            </FormGroup>
+            </form>
+            <div>
+            <Card style={{height: '400px', borderBlockEndColor: 'black',  width: '1090px', right: '12px', top: "10px"}}>
+            <CardBody>
+                    <form style={{height: '80px', backgroundColor: 'white'}}>
+            {successbutton && <AllList localsite1={selectedsite} localsitepartner1={selectedpartner} />}
+            {searchbutton && <SearchButtonPopup trigger={searchbutton} setTrigger={setsearchbutton} localsite1={selectedsite} localsitepartner1={selectedpartner} searchTextboxValue1={searchboxValue} />}
+            {showmodalCalender && <DatePopup trigger={showmodalCalender} setTrigger={setshowmodalCalender} />}
+            
+            </form>
+            </CardBody>
+            </Card>
+            </div>
+            </CardBody>
+            </Card>
+            </Card>
+                    </Col>
+                    </Row>
+
+        
     );
 }
 

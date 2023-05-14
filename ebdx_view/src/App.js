@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
 import {Row,Col, Container, CardBody, Card, FormGroup, DropdownItem} from "reactstrap";
-import { BrowserRouter,Route,Routes,NavLink, Router } from 'react-router-dom';
+import { BrowserRouter,NavLink } from 'react-router-dom';
 import { Nav, NavDropdown, NavItem } from 'react-bootstrap';
-import Home from './Components/Home';
 import About from './Components/About';
-import Language from './Components/Language';
-import logo from './image/logo.jpg';
 import { ToastContainer } from 'react-toastify';
 import SelectionMenu from './Components/SelectionMenu';
-import AllList from './Components/AllList';
-import { ReactDialogBox } from 'react-js-dialog-box'
+import Language from './Components/Language';
+import ExitApp from './Components/ExitApp';
 
 function App() {
 
-    function closeTab(){
+   /*  function closeTab(){
         console.log("You clicked on exit");
         const confirmbox = window.confirm("Do you want to exit this page?")
         if(confirmbox === true){
             window.close();
         }     
-    }
+    } */
 
     const [showModal, setShowModal] = useState(false);
+    const [showModalLanguage, setShowModalLanguage] = useState(false);
+    const [showModalExit, setShowModalExit] = useState(false);
 
   return (
     <>
@@ -34,10 +33,10 @@ function App() {
                 height: '70px',
                 border: '2px solid green',
             }}>
-                <div style={{ margin: '10px', width: '100px' }}>
+                <div style={{ margin: '10px', width: '80px' }}>
                     <Nav>
                         <NavDropdown title = "Home">
-                            <NavDropdown.Item onClick={closeTab}>Exit</NavDropdown.Item>
+                            <NavDropdown.Item style={{background: 'lightgreen',color: 'blue'}} onClick={() => setShowModalExit(true)}>Exit</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                     {/* <NavLink to="/" style={({ isActive }) => ({ 
@@ -46,66 +45,31 @@ function App() {
                         <DropdownItem>Exit</DropdownItem>
                     </NavLink> */}
                 </div>
-                <div style={{ margin: '10px' }}>
-                    <NavLink to="/Language" style={({ isActive }) => ({ 
-                        color: isActive ? 'green' : 'blue' })}>
-                        Language
-                    </NavLink>
+                <div style={{ margin: '10px', width: '120px' }}>
+                    <Nav>
+                <NavDropdown title = "Language">
+                            <NavDropdown.Item style={{background: 'lightgreen',color: 'blue'}} onClick={() => setShowModalLanguage(true)}>Franch</NavDropdown.Item>
+                            
+                        </NavDropdown>
+                        </Nav>
                 </div>
-                <div style={{ margin: '10px' }}>
+                <div style={{ margin: '10px', width: '100px' }}>
                 <Nav>
                         <NavDropdown title = "Help">
-                            <NavDropdown.Item onClick={() => setShowModal(true)}>About eBDView</NavDropdown.Item>
-                            {showModal && <About />}
+                            <NavDropdown.Item style={{background: 'lightgreen',color: 'blue'}} onClick={() => setShowModal(true)}>About eBDView</NavDropdown.Item>
+                            
                         </NavDropdown>
                     </Nav>
                 </div>
             </div>
             <div>
             <ToastContainer />
-            <Container>
-                <Row>
-                    <Col md={4}>
-                        <React.Fragment>
-                            <SelectionMenu />
-                        </React.Fragment>    
-                    </Col>
-                    <Col md={8}>
-                    <Card style={{height: '900px', borderBlockEndColor: 'black', width: '1100px', right: '160px'}}>
-                    <Card style={{height: '150px', borderBlockEndColor: 'black'}}>
-                    <CardBody>
-                    <form style={{height: '80px', backgroundColor: 'white'}}>
-                    <FormGroup>
-                        <div style={{height: '150px', width: '1000px', margin: '5px'}}>
-                            <label style={{color: 'green'}}>Interchange Number</label>{' '}
-                        <input name="SearchTextbox" type="textbox"/> {' '}
-                                <button style={{background: 'green', color: 'white'}}>Go</button>
-                        <div className='logo' style={{float : 'right', margin : '10px'}}>
-                <img src={logo} height={100} width={200} /> 
-            </div>
             
-            <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route exact path="/Language" element={<Language />} />
-                <Route exact path="/About" element={<About />} />
-            </Routes>
-            </div>
-            </FormGroup>
-            </form>
-            </CardBody>
-            </Card>
-            <Card style={{height: '400px', borderBlockEndColor: 'black'}}>
-                <CardBody>
-                <form style={{height: '380px', backgroundColor: 'white'}}>
-                    <FormGroup>
-                        <AllList />
-                </FormGroup>
-            </form>
-                </CardBody>
-            </Card>
-            </Card>
-        </Col>
-        </Row>
+            <Container>
+            <SelectionMenu />
+                {showModal && <About trigger={showModal} setTrigger={setShowModal} />}
+                {showModalLanguage && <Language trigger={showModalLanguage} setTrigger={setShowModalLanguage} />}
+                {showModalExit && <ExitApp trigger={showModalExit} setTrigger={setShowModalExit} />}
         </Container>
             </div>
         </BrowserRouter>

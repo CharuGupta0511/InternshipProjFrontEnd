@@ -6,8 +6,7 @@ import "./tableContent.css";
 import { Button, Card, CardBody, CardSubtitle, CardText, Container } from "reactstrap";
 
 
-
-const AllList = () => {
+function AllList(props) {
 
     /* useEffect(() => {
         const getAllListFromServer = () => {
@@ -25,26 +24,47 @@ const AllList = () => {
         getAllListFromServer();
     }, []); */
          
-
+    const localsitevalue = props.localsite1;
+    const localsitepartnervalue = props.localsitepartner1;
+    const documenttypevalue = props.documenttype1;
     const [products, setProducts] = useState([]);
 
+    console.log(localsitevalue);
+    console.log(localsitepartnervalue);
+
          useEffect(() => {
-              const getAllSitesFromServer = () => {
-                  axios.get(`/documents?localSiteName=AFHOME`).then(
-                      (response) =>{
-                         // console.log(response);
-                         console.log(response.data);
-                         setProducts(response.data.documents);
-                      },
-                      (error) => {
-                          console.log(error);
-                      }
-                  );
-        
-              };
               getAllSitesFromServer();
-          }, []);
-    
+          },[]);
+          
+
+          const getAllSitesFromServer = () => {
+            if(localsitevalue === "AFHOME") {
+              axios.get(`/documents?localSiteName=AFHOME`).then(
+                  (response) =>{
+                     // console.log(response);
+                     console.log(response.data);
+                     setProducts(response.data.documents);
+                     
+                  },
+                  (error) => {
+                      console.log(error);
+                  }
+              );
+                }
+                else{
+                    axios.get(`/documents?localSiteName=NPRO`).then(
+                        (response) =>{
+                           // console.log(response);
+                           console.log(response.data);
+                           setProducts(response.data.documents);
+                           
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                }
+          };
 
     return(
         <div>
@@ -64,10 +84,17 @@ const AllList = () => {
                         <th>Doc Info</th>
                 </thead>
                 <tbody>
-                 {products.length > 0
-                    ? products.map((item, idx) => <OneList key={item.id} product={item} />)
-                    : "No Product"
-            } 
+                    {
+                    products.length > 0 && localsitepartnervalue === "All Partners"
+                    ? products.map((item, idx) => 
+                        <OneList key={item.id} product={item} />)
+
+                    : products.filter(item => {
+                        return (item.partner === localsitepartnervalue);
+                        })
+                    .map((item, idx) => 
+                            <OneList key={item.id} product={item} />)
+                    }
                 </tbody>
             </table> 
                 </div>
