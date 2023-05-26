@@ -53,7 +53,7 @@ function SelectionMenu() {
              setselectedpartner([]);
              setSitePartners(sites.find(site => site.name === selectedsite).partner);
              setselectedpartner("All Partners");
-
+             setsuccesspartnerbutton(false);
              setDocumentTypeboxValue('');
              setsuccessbutton(false);
 
@@ -66,20 +66,15 @@ function SelectionMenu() {
             setsearchboxValue('');
          }
 
+         const [successpartnerbutton, setsuccesspartnerbutton] = useState(false);
          const handletextPartner=(event)=> {
             const selectedpartner= event.target.value;
             setselectedpartner(selectedpartner);
             setsuccessbutton(false);
-
+            setsuccesspartnerbutton(true);
             setDocumentTypeboxValue('');
             setsearchboxValue('');
-
-            setTodate('');
-            setFromdate('');
-            setTodateformat('');
-            setFromdateformat('');
-            setcheckedbox('');
-            setDisable(true);
+            
          }
 
          const [DocumentTypeboxValue, setDocumentTypeboxValue]=useState('');
@@ -134,6 +129,7 @@ function SelectionMenu() {
                         console.log('Success');
                 setsuccessbutton(true);
                 setsearchboxValue('');
+                setsuccesspartnerbutton(false);
                     }
                 }
                 else
@@ -147,6 +143,7 @@ function SelectionMenu() {
             else{
                 console.log('Success');
                 setsuccessbutton(true);
+                setsuccesspartnerbutton(false);
                 setsearchboxValue('');
             }
 
@@ -417,6 +414,7 @@ function SelectionMenu() {
             {successbutton && <AllList localsite1={selectedsite} localsitepartner1={selectedpartner} documentType1={DocumentTypeboxValue} todate1={todatefromat} fromdate1={fromdateformat} />}
             {searchbutton && <SearchButtonPopup trigger={searchbutton} setTrigger={setsearchbutton} localsite1={selectedsite} localsitepartner1={selectedpartner} searchTextboxValue1={searchboxValue} />}
             {showmodalCalender && <DatePopup trigger={showmodalCalender} setTrigger={setshowmodalCalender} />}
+            {successpartnerbutton && <AllList localsite1={selectedsite} localsitepartner1={selectedpartner} documentType1={DocumentTypeboxValue} todate1={todatefromat} fromdate1={fromdateformat} />}
             
             </form>
             </CardBody>
