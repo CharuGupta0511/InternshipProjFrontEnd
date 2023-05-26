@@ -16,7 +16,7 @@ function DatePopup(props){
                 <div className="modal_close" onClick={() => props.setTrigger(false)}>&times;</div>
                 <div className="modal_title">eBDView v 1.0.1</div>
                 <div className="modal_content">
-                <p>Start date can't be later than End date</p>
+                <p>Start date can't be later than End date or select start date and end date both.</p>
                 </div>
                 
                 <div className="modal_footer">
