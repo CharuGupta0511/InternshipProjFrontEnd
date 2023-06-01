@@ -26,7 +26,7 @@ function AllList(props) {
          
     const localsitevalue = props.localsite1;
     const localsitepartnervalue = props.localsitepartner1;
-    const documenttypevalue = props.documentType1;
+    const documenttypevalue = props.documentType1.toUpperCase();
     const fromdatevalue = props.fromdate1;
     const todatevalue = props.todate1;
 
@@ -44,7 +44,19 @@ function AllList(props) {
           
 
           const getAllSitesFromServer = () => {
-            if(localsitevalue === "AFHOME") {
+            axios.get(`/documents?localSiteName=${localsitevalue}`).then(
+                (response) =>{
+                   // console.log(response);
+                   console.log(response.data);
+                   setProducts(response.data.documents);
+                   
+                },
+                (error) => {
+                    console.log(error);
+                }
+            );
+            
+           /*  if(localsitevalue === "AFHOME") {
               axios.get(`/documents?localSiteName=AFHOME`).then(
                   (response) =>{
                      // console.log(response);
@@ -68,7 +80,7 @@ function AllList(props) {
                             console.log(error);
                         }
                     );
-                }
+                } */
           };
 
     return(

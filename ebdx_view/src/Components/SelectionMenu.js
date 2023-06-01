@@ -50,13 +50,13 @@ function SelectionMenu() {
          const handletextSite=(event)=> {
             const selectedsite= event.target.value;
              setselectedsite(selectedsite);
-             setselectedpartner([]);
              setSitePartners(sites.find(site => site.name === selectedsite).partner);
              setselectedpartner("All Partners");
-             setsuccesspartnerbutton(false);
              setDocumentTypeboxValue('');
              setsuccessbutton(false);
-
+             setsuccessSearchbutton(false)
+             setsearchboxValue('');
+             setcheckedboxchecked(false);
              setTodate('');
             setFromdate('');
             setcheckedbox('');
@@ -66,14 +66,14 @@ function SelectionMenu() {
             setsearchboxValue('');
          }
 
-         const [successpartnerbutton, setsuccesspartnerbutton] = useState(false);
+         
          const handletextPartner=(event)=> {
             const selectedpartner= event.target.value;
             setselectedpartner(selectedpartner);
-            setsuccessbutton(false);
-            setsuccesspartnerbutton(true);
+            setsuccessbutton(true);
             setDocumentTypeboxValue('');
             setsearchboxValue('');
+            setsuccessSearchbutton(true);
             
          }
 
@@ -83,7 +83,7 @@ function SelectionMenu() {
             const docTypebox = e.target.value;
             setDocumentTypeboxValue(docTypebox);
             console.log(docTypebox);
-            setsuccessbutton(false);
+            //setsuccessbutton(false);
          }
 
          const [searchboxValue, setsearchboxValue]=useState('');
@@ -91,6 +91,7 @@ function SelectionMenu() {
             e.preventDefault();
             const searchbox = e.target.value;
             setsearchboxValue(searchbox);
+            setsuccessbutton(true);
             console.log(searchbox);
          }
 
@@ -112,40 +113,15 @@ function SelectionMenu() {
 
          const[showmodalCalender, setshowmodalCalender] = useState(false);
         const [successbutton, setsuccessbutton] = useState(false);
+        const [successSearchbutton, setsuccessSearchbutton] = useState(false);
          function handlesubmit(event)
          {
             event.preventDefault();
-            if (fromdateformat)
-            {
-                if(todate)
-                {
-                    if(fromdateformat > todatefromat)
-                    {
-                        setshowmodalCalender(true);
-                  //  alert("Start date can't be later than End date");
-                        setsuccessbutton(false);
-                    }
-                    else{
-                        console.log('Success');
-                setsuccessbutton(true);
-                setsearchboxValue('');
-                setsuccesspartnerbutton(false);
-                    }
-                }
-                else
-                {
-                    setshowmodalCalender(true);
-                  //  alert("Start date can't be later than End date");
-                        setsuccessbutton(false);
-                }
-            }
-            
-            else{
+           
                 console.log('Success');
                 setsuccessbutton(true);
-                setsuccesspartnerbutton(false);
                 setsearchboxValue('');
-            }
+                setsuccessSearchbutton(true);
 
             
            // getProductWithSitenParter(selectedsite,selectedpartner);
@@ -168,7 +144,7 @@ function SelectionMenu() {
        const [todate, setTodate] = useState([]);
        const [fromdate, setFromdate] = useState([]);
 
-       const [todatefromat, setTodateformat] = useState('');
+       
     const [fromdateformat, setFromdateformat] = useState('');
 
     const handlefromdate = (e) => {
@@ -185,9 +161,9 @@ function SelectionMenu() {
         console.log(getfromdatevalue);
         console.log(setfromdateformat);
         console.log(setfromdateformatshow);
-        setsuccessbutton(false);
     }
 
+    const [todatefromat, setTodateformat] = useState('');
     const handletodate = (e) =>{
         const gettodatevalue = e.target.value;
         const setdateformat = gettodatevalue.split('-');
@@ -202,21 +178,37 @@ function SelectionMenu() {
         console.log(gettodatevalue);
         console.log(settodateformat);
         console.log(settodateformatshow);
-        setsuccessbutton(false);
+
+            if(fromdateformat > settodateformat)
+                {
+                    console.log(fromdateformat);
+                    console.log(settodateformat);
+                    setshowmodalCalender(true);
+                  //  alert("Start date can't be later than End date");
+                    setsuccessbutton(false);
+                }
+            else
+                {
+                    console.log('Success');
+                    setsuccessbutton(true);
+                    setsuccessSearchbutton(true);
+                }
     }
         
          
-
+        const [checkedboxchecked, setcheckedboxchecked]=useState('');
          const [checkedboxvalue, setcheckedbox]=useState('');
          const handleCheckbox1 = (e) => {
             const checkedbox = e.target.checked;
             setcheckedbox(checkedbox);
+            setcheckedboxchecked(true);
             if(!checkedbox){  
             setTodate('');
             setFromdate('');
             setTodateformat('');
             setFromdateformat('');
             setDisable(true);
+            setcheckedboxchecked(false);
             }
             console.log(checkedbox);
          }
@@ -233,6 +225,12 @@ function SelectionMenu() {
             });
             e.target.checked = true;
          }
+        function getPartnersValues() {
+            return SitePartners.map((partner) => {
+              return <option>{partner} 
+                     </option>;
+            });
+          }
 
 
     return (
@@ -260,7 +258,6 @@ function SelectionMenu() {
                                                     <option value={site.name}>{site.name}</option>
                                                 ))
                                             }
-                                            console.log(e.target.key);
                                         </select>
                                     </div>
                                 </div>
@@ -273,13 +270,9 @@ function SelectionMenu() {
                     <Label style={{fontWeight:'bold', fontSize: '15px', color: 'blue'}}>Select Partner</Label>
                     <div className="dropdown">
                     <div className="dropdown-content">   
-                        <select name="partner" placeholder="select here" className="dropdown-item" onChange={(e)=>handletextPartner(e)}>
+                        <select name="partner" className="dropdown-item" value={selectedpartner} defaultValue="All Partners" onChange={(e)=>handletextPartner(e)}>
                         
-                            {
-                                SitePartners.map(partner => (
-                                    <option value={partner}>{partner}</option>
-                                ))
-                            } 
+                            {getPartnersValues()} 
                         </select>
                     </div>
                 </div>
@@ -302,7 +295,7 @@ function SelectionMenu() {
                             </div>          
                             </FormGroup>
                             <FormGroup check>
-                                <Input name="checkbox1" value="Custom" type="checkbox" onChange={handleCheckbox1} /> {' '}
+                                <Input name="checkbox1" value="Custom" type="checkbox" checked={checkedboxchecked} onChange={handleCheckbox1} /> {' '}
                                 <Label check>Custom</Label>
                              </FormGroup>
                              <FormGroup>
@@ -398,9 +391,9 @@ function SelectionMenu() {
                     <FormGroup>
                         <div style={{height: '150px', width: '1000px', margin: '5px'}}>
                             <label style={{color: 'green'}}>Interchange Number</label>{' '}
-                        <input name="SearchTextbox" type="textbox" disabled={!successbutton} onChange={handleSearchTextbox} value={searchboxValue} /> {' '}
-                                <button  disabled={!successbutton} style={{background: 'green', color: 'white', width: '60px', boxShadow: '0 2px 10px #999'}} onClick={handlesubmitSearch }>Go</button>{' '}
-                                <button  disabled={!successbutton} style={{background: 'blue', color: 'white', width: '60px', boxShadow: '0 2px 10px #999'}} onClick={handlesubmitSearchClear }>Clear</button>
+                        <input name="SearchTextbox" type="textbox" disabled={!successSearchbutton} onChange={handleSearchTextbox} value={searchboxValue} /> {' '}
+                                <button  disabled={!successSearchbutton} style={{background: 'green', color: 'white', width: '60px', boxShadow: '0 2px 10px #999'}} onClick={handlesubmitSearch }>Go</button>{' '}
+                                <button  disabled={!successSearchbutton} style={{background: 'blue', color: 'white', width: '60px', boxShadow: '0 2px 10px #999'}} onClick={handlesubmitSearchClear }>Clear</button>
                         <div className='logo' style={{float : 'right', margin : '10px'}}>
                 <img src={logo} height={100} width={200} /> 
             </div>
@@ -414,8 +407,6 @@ function SelectionMenu() {
             {successbutton && <AllList localsite1={selectedsite} localsitepartner1={selectedpartner} documentType1={DocumentTypeboxValue} todate1={todatefromat} fromdate1={fromdateformat} />}
             {searchbutton && <SearchButtonPopup trigger={searchbutton} setTrigger={setsearchbutton} localsite1={selectedsite} localsitepartner1={selectedpartner} searchTextboxValue1={searchboxValue} />}
             {showmodalCalender && <DatePopup trigger={showmodalCalender} setTrigger={setshowmodalCalender} />}
-            {successpartnerbutton && <AllList localsite1={selectedsite} localsitepartner1={selectedpartner} documentType1={DocumentTypeboxValue} todate1={todatefromat} fromdate1={fromdateformat} />}
-            
             </form>
             </CardBody>
             </Card>
